@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>Parameter from URL</h1>
+  <p id="result"></p>
+
+  <script>
+    // URL에서 파라메터 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('code');
+    
+    // 가져온 파라메터를 HTML에 표시
+    document.getElementById('result').textContent = `Query parameter: ${query}`;
+  </script>
+</body>
+</html>
