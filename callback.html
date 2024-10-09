@@ -7,7 +7,9 @@
 </head>
 <body>
   <h1>Parameter from URL</h1>
-  <p id="result"></p>
+  <p id="aaccessCode"></p>
+
+  <div id="result"></div>
 
   <script>
     // URL에서 파라메터 가져오기
@@ -15,7 +17,26 @@
     const query = urlParams.get('code');
     
     // 가져온 파라메터를 HTML에 표시
-    document.getElementById('result').textContent = `Query parameter: ${query}`;
+    document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
+
+
+    // 다른 URL로 POST 요청을 보냄
+    fetch('https://azbtlh7mvg.execute-api.ap-northeast-2.amazonaws.com/prod/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ query: query })  // JSON 형식으로 데이터 전송
+    })
+    .then(response => response.json())  // 서버 응답을 JSON으로 파싱
+    .then(data => {
+      alert(data);
+      document.getElementById('result').textContent = `Success: ${JSON.stringify(data)}`;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
   </script>
 </body>
 </html>
