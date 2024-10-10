@@ -15,14 +15,19 @@
   <script>
     // URL에서 파라메터 가져오기
     const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('code');
-    
+    const query = '222';
+
     // 가져온 파라메터를 HTML에 표시
     document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
 
+   
 
-    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth?code=${query}', {
-      method: 'GET'
+    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ code: query })  // JSON 형식으로 데이터 전송
     })
     .then(response => response.json())
     .then(data =>  
