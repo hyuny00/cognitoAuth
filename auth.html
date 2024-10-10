@@ -1,1 +1,20 @@
-1234
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+
+    const idToken = localStorage.getItem('idToken'); // 저장된 ID Token을 가져옵니다.
+    // ID Token을 JSON으로 디코딩하여 사용자 정보를 확인할 수 있습니다.
+    const payload = JSON.parse(atob(idToken.split('.')[1]));
+    console.log(payload); // 사용자 정보 출력
+    
+  </script>
+
+
+</body>
+</html>
