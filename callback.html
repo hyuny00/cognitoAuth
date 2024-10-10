@@ -19,23 +19,16 @@
     // 가져온 파라메터를 HTML에 표시
     document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
 
-
-    // 다른 URL로 POST 요청을 보냄
-    fetch('https://p0onvr25ma.execute-api.ap-northeast-2.amazonaws.com/prod', {
-      method: 'POST',
+    fetch('https://v6ch5lv0jf.execute-api.ap-northeast-2.amazonaws.com/prod', {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ query: query })  // JSON 형식으로 데이터 전송
+        'x-api-key': '2kqGvRtgqG1x1nGRH7jDJgDzHOyCnnH15SXC1kwg'
+      }
     })
-    .then(response => response.json())  // 서버 응답을 JSON으로 파싱
-    .then(data => {
-      alert(data);
-      document.getElementById('result').textContent = `Success: ${JSON.stringify(data)}`;
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+    
 
   </script>
 </body>
