@@ -23,7 +23,9 @@
             //console.log('Header:', header);
             console.log('Payload:', payload);
 
-            document.getElementById('usernm').innerText = 'login success, token: ' + payload;
+            const username = payload['cognito:username']
+
+            document.getElementById('usernm').innerText = 'login success, token: ' + username;
         } else {
             console.error('Invalid JWT structure');
         }
