@@ -21,7 +21,7 @@
     document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
 
 
-    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth', {
+    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth?code=${query}', {
       method: 'GET'
     })
     .then(response => response.json())
