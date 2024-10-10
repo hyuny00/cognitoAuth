@@ -15,7 +15,7 @@
   <script>
     // URL에서 파라메터 가져오기
     const urlParams = new URLSearchParams(window.location.search);
-    const query = '222';
+    const query = urlParams.get('code');
 
     // 가져온 파라메터를 HTML에 표시
     document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
