@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,16 +20,17 @@
     // 가져온 파라메터를 HTML에 표시
     document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
 
-    fetch('https://v6ch5lv0jf.execute-api.ap-northeast-2.amazonaws.com/prod', {
-      method: 'GET',
-      headers: {
-        'x-api-key': '2kqGvRtgqG1x1nGRH7jDJgDzHOyCnnH15SXC1kwg'
-      }
+
+    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth', {
+      method: 'GET'
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data =>  
+        {document.getElementById('result').textContent = `Success: ${JSON.stringify(data)}`}
+        )
     .catch(error => console.error('Error:', error));
-    
+
+
 
   </script>
 </body>
