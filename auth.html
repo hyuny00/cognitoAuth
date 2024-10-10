@@ -14,7 +14,7 @@
 
     if (idToken) {
         // JWT를 '.'로 분리
-        const parts = token.split('.');
+        const parts = idToken.split('.');
         if (parts.length === 3) {
             // Header와 Payload 디코딩
             const header = JSON.parse(atob(parts[0]));
