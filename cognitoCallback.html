@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+   <!-- AWS SDK -->
+   <script src="assets/js/aws-cognito-sdk.min.js"></script>
+   <!-- Amazon Cognito Identity SDK -->
+
+
+   <script src="assets/js/amazon-cognito-identity.min.js"></script>
 </head>
 <body>
   <script>
@@ -18,7 +24,25 @@ const clientId = '23h323cjmckg249ncd11fgh36r';
 const cognitoDomain = 'https://tarrotok.auth.ap-northeast-2.amazoncognito.com';
 const redirectUri = 'https://main.d2ri753qyvsils.amplifyapp.com/cognitoCallback.html'; // 콜백 URL
 
+
+const poolData = {
+    UserPoolId: 'ap-northeast-2_qHoUh9Ggs', // AWS Cognito User Pool ID
+    ClientId: '23h323cjmckg249ncd11fgh36r' // AWS Cognito App Client ID
+};
+
+// Cognito User Pool 객체 생성
+const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+function getCurrentUser() {
+    return userPool.getCurrentUser();
+}
+
 if (authorizationCode) {
+
+    const cognitoUser = getCurrentUser();
+
+    console.log('kkk...'+cognitoUser);
+
     // Token 교환을 위한 요청 준비
     const tokenUrl = `${cognitoDomain}./oauth2/token`;
 
