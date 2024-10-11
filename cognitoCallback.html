@@ -39,9 +39,7 @@ function getCurrentUser() {
 
 if (authorizationCode) {
 
-    const cognitoUser = getCurrentUser();
-
-    console.log('kkk...'+cognitoUser);
+   
 
     // Token 교환을 위한 요청 준비
     const tokenUrl = `${cognitoDomain}./oauth2/token`;
@@ -68,7 +66,7 @@ if (authorizationCode) {
         const idToken = tokenResponse.id_token;
         const refreshToken = tokenResponse.refresh_token; // 리프레쉬 토큰 포함
 
-
+        setCognitoSession(accessToken, idToken);
 
         // 토큰 저장 (localStorage 예시)
         localStorage.setItem('accessToken', accessToken);
@@ -83,6 +81,27 @@ if (authorizationCode) {
     });
 } else {
     console.error('Authorization code not found');
+}
+
+function setCognitoSession(accessToken, idToken) {
+    const cognitoUser = userPool.getCurrentUser(); // 현재 사용자 가져오기
+
+    if (cognitoUser) {
+        // CognitoUserSession을 생성
+        const session = new AmazonCognitoIdentity.CognitoUserSession({
+            IdToken: new AmazonCognitoIdentity.CognitoIdToken({ IdToken: idToken }), // ID 토큰 설정
+            AccessToken: new AmazonCognitoIdentity.CognitoAccessToken({ AccessToken: accessToken }) // 액세스 토큰 설정
+        });
+
+        cognitoUser.setSignInUserSession(session); // 사용자 세션 설정
+        console.log('Cognito session set successfully.');
+        
+        // 이제 getCurrentUser()를 사용하여 현재 사용자 정보를 가져올 수 있습니다
+        const currentUser = getCurrentUser();
+        console.log('Current User:', currentUser);
+    } else {
+        console.log('No user is currently logged in.');
+    }
 }
 
 
