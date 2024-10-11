@@ -48,6 +48,9 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
 
             document.getElementById("loginStatus").innerText = "Login successful!";
             console.log("Access Token: " + accessToken);
+
+             // 다른 페이지로 이동
+           window.location.href = 'auth.html'; // 다음 페이지의 URL로 변경하세요
         },
         onFailure: function (err) {
             document.getElementById("loginStatus").innerText = "Login failed: " + err.message;
