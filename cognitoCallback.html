@@ -25,17 +25,6 @@ const cognitoDomain = 'https://tarrotok.auth.ap-northeast-2.amazoncognito.com';
 const redirectUri = 'https://main.d2ri753qyvsils.amplifyapp.com/cognitoCallback.html'; // 콜백 URL
 
 
-const poolData = {
-    UserPoolId: 'ap-northeast-2_qHoUh9Ggs', // AWS Cognito User Pool ID
-    ClientId: '23h323cjmckg249ncd11fgh36r' // AWS Cognito App Client ID
-};
-
-// Cognito User Pool 객체 생성
-const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
-
-function getCurrentUser() {
-    return userPool.getCurrentUser();
-}
 
 if (authorizationCode) {
 
@@ -66,7 +55,6 @@ if (authorizationCode) {
         const idToken = tokenResponse.id_token;
         const refreshToken = tokenResponse.refresh_token; // 리프레쉬 토큰 포함
 
-        setCognitoSession(accessToken, idToken);
 
         // 토큰 저장 (localStorage 예시)
         localStorage.setItem('accessToken', accessToken);
@@ -74,7 +62,7 @@ if (authorizationCode) {
         localStorage.setItem('refreshToken', refreshToken);
 
         // 리다이렉트 또는 추가 작업 수행
-       // window.location.href = '/auth.html'; // 원하는 페이지로 이동
+        window.location.href = '/auth.html'; // 원하는 페이지로 이동
     })
     .catch(error => {
         console.error('Error fetching token:', error);
@@ -83,26 +71,6 @@ if (authorizationCode) {
     console.error('Authorization code not found');
 }
 
-function setCognitoSession(accessToken, idToken) {
-    const cognitoUser = userPool.getCurrentUser(); // 현재 사용자 가져오기
-
-    if (cognitoUser) {
-        // CognitoUserSession을 생성
-        const session = new AmazonCognitoIdentity.CognitoUserSession({
-            IdToken: new AmazonCognitoIdentity.CognitoIdToken({ IdToken: idToken }), // ID 토큰 설정
-            AccessToken: new AmazonCognitoIdentity.CognitoAccessToken({ AccessToken: accessToken }) // 액세스 토큰 설정
-        });
-
-        cognitoUser.setSignInUserSession(session); // 사용자 세션 설정
-        console.log('Cognito session set successfully.');
-        
-        // 이제 getCurrentUser()를 사용하여 현재 사용자 정보를 가져올 수 있습니다
-        const currentUser = getCurrentUser();
-        console.log('Current User:', currentUser);
-    } else {
-        console.log('No user is currently logged in.');
-    }
-}
 
 
   </script>

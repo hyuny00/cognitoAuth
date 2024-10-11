@@ -71,48 +71,48 @@ function getCurrentUser() {
 }
 
 document.getElementById("logoutButton").addEventListener("click", function () {
-    const cognitoUser = getCurrentUser();
 
-
-   
-        
-    if (cognitoUser) {
-        cognitoUser.getUserAttributes((err, attributes) => {
-            if (err) {
-                console.error('Error fetching user attributes:', err);
-                return;
-            }
-
-            // attributes 배열에서 'identities' 필드 찾기
-            const identityProvider = attributes.find(attr => attr.Name === 'identities');
-
-            if (identityProvider) {
-                // 외부 공급자로 로그인한 경우
-                console.log('User logged in with an external provider:', identityProvider.Value);
-                
-                // 외부 공급자 로그아웃 처리 (예: Google 로그아웃)
-                const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com/login.html')}`;
-                window.location.href = logoutUrl; // Cognito 로그아웃
-            } else {
-                // Cognito User Pool 로그인을 통한 경우
-                cognitoUser.signOut(); // Cognito 세션 로그아웃
-
-                // 로컬 스토리지에서 토큰 삭제
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('idToken');
-                localStorage.removeItem('refreshToken');
-
-                localStorage.removeItem('username');
-                
-
-                
-                document.getElementById("logoutStatus").innerText = "You have been logged out.";
-            }
-        });
-    } else {
-        document.getElementById("logoutStatus").innerText = "No user is logged in.";
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
+        console.error('No ID token found');
+        return;
     }
 
+             
+
+    // ID 토큰 디코딩
+    const payload = JSON.parse(atob(idToken.split('.')[1]));
+    const identityProvider = payload['identities'] ? JSON.parse(payload['identities'])[0].providerName : 'Cognito';
+
+    
+    // 로컬 스토리지에서 토큰 삭제
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('idToken');
+    localStorage.removeItem('refreshToken');
+
+    localStorage.removeItem('username');
+
+    if (identityProvider.toLowerCase() === 'google') {
+        // 외부 공급자로 로그인한 경우
+        console.log('User logged in with an external provider:', identityProvider.Value);
+                        
+        // 외부 공급자 로그아웃 처리 (예: Google 로그아웃)
+        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com/login.html')}`;
+        window.location.href = logoutUrl; // Cognito 로그아웃
+    }else{
+        const cognitoUser = getCurrentUser();
+
+        if (cognitoUser) {
+            cognitoUser.signOut(); // 로그아웃 처리
+    
+            document.getElementById("logoutStatus").innerText = "You have been logged out.";
+        } else {
+            document.getElementById("logoutStatus").innerText = "No user is logged in.";
+        }
+
+    }
+
+  
 
 /*
     if (cognitoUser) {
