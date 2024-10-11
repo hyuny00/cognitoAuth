@@ -146,6 +146,11 @@ function refreshAccessToken() {
     cognitoUser.refreshSession(new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: refreshToken }), (err, session) => {
         if (err) {
             console.error("Failed to refresh session:", err);
+            // Refresh Token이 만료된 경우 로그인 페이지로 리다이렉트
+            if (err.code === 'NotAuthorizedException' || err.message.includes('Refresh Token has expired')) {
+                alert("Session expired. Redirecting to login page.");
+                window.location.href = '/login.html'; // 로그인 페이지로 리다이렉트
+            }
             return;
         }
         
