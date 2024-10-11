@@ -81,9 +81,20 @@ document.getElementById("logoutButton").addEventListener("click", function () {
              
 
     // ID 토큰 디코딩
+    // ID 토큰 디코딩
     const payload = JSON.parse(atob(idToken.split('.')[1]));
-    const identityProvider = payload['identities'] ? JSON.parse(payload['identities'])[0].providerName : 'Cognito';
-
+    
+    // identityProvider 확인 로직 수정
+    let identityProvider = 'Cognito';
+    if (payload.identities) {
+        const identities = typeof payload.identities === 'string' 
+            ? JSON.parse(payload.identities) 
+            : payload.identities;
+        
+        if (Array.isArray(identities) && identities.length > 0) {
+            identityProvider = identities[0].providerName || 'Cognito';
+        }
+    }
     
     // 로컬 스토리지에서 토큰 삭제
     localStorage.removeItem('accessToken');
