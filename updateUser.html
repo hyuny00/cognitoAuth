@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- AWS SDK -->
+     <script src="assets/js/aws-cognito-sdk.min.js"></script>
+     <!-- Amazon Cognito Identity SDK -->
+     <script src="assets/js/amazon-cognito-identity.min.js"></script>
+</head>
+<body>
+
+    <form id="update-profile-form">
+        <input type="text" id="new-nickname" placeholder="새 닉네임">
+        <input type="password" id="old-password" placeholder="현재 비밀번호">
+        <input type="password" id="new-password" placeholder="새 비밀번호">
+        <button type="submit">프로필 업데이트</button>
+    </form>
+    <div id="update-message"></div>
+    
+    <script src="assets/js/updateUser.js"></script>
+</body>
+</html>
