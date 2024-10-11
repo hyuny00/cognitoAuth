@@ -1,1 +1,41 @@
-1234
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+
+  <div id="usernm"></div>
+  <script>
+
+    const idToken = localStorage.getItem('idToken'); // 저장된 ID Token을 가져옵니다.
+
+    if (idToken) {
+        // JWT를 '.'로 분리
+        const parts = idToken.split('.');
+        if (parts.length === 3) {
+            // Header와 Payload 디코딩
+            const header = JSON.parse(atob(parts[0]));
+            const payload = JSON.parse(atob(parts[1]));
+
+            //console.log('Header:', header);
+            console.log('Payload:', payload);
+
+            const username = payload['cognito:username']
+
+            document.getElementById('usernm').innerText = 'login success, token: ' + username;
+        } else {
+            console.error('Invalid JWT structure');
+        }
+} else {
+    console.error('JWT not found in local storage');
+}
+
+
+  </script>
+
+
+</body>
+</html>
