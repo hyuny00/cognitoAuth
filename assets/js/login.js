@@ -78,6 +78,8 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         return;
     }
 
+    const accessToken = localStorage.getItem('accessToken');
+
              
 
     // ID 토큰 디코딩
@@ -96,6 +98,8 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         }
     }
     
+
+
     // 로컬 스토리지에서 토큰 삭제
     localStorage.removeItem('accessToken');
     localStorage.removeItem('idToken');
@@ -104,12 +108,29 @@ document.getElementById("logoutButton").addEventListener("click", function () {
     localStorage.removeItem('username');
 
     if (identityProvider.toLowerCase() === 'google') {
-        // 외부 공급자로 로그인한 경우
-        console.log('User logged in with an external provider:', identityProvider.Value);
-                        
-        // 외부 공급자 로그아웃 처리 (예: Google 로그아웃)
-        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
-        window.location.href = logoutUrl; // Cognito 로그아웃
+        console.log('User logged in with Google');
+  
+        // Google 토큰 취소
+        fetch(`https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Google token revocation failed');
+            }
+            console.log('Google token revoked successfully');
+        })
+        .catch(error => {
+            console.error('Error revoking Google token:', error);
+        })
+        .finally(() => {
+            // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
+            const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+            window.location.href = logoutUrl;
+  });
     }else{
         const cognitoUser = getCurrentUser();
 
