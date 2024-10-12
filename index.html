@@ -17,9 +17,19 @@
   <img src="https://k.kakaocdn.net/14/dn/btroDszwNrM/I6efHub1SN5KCJqLm1Ovx1/o.jpg" width="222"
     alt="카카오 로그인 버튼" />
 </a>
+
+<br>
+<a id="kakao-login-btn" href="https://tarrotok.auth.ap-northeast-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https://main.d2ri753qyvsils.amplifyapp.com/cognitoCallback.html&response_type=CODE&client_id=23h323cjmckg249ncd11fgh36r&scope=email+openid+profile">
+  <img src="assets/images/web_dark_sq_SI@2x.png" width="222"
+    alt="구글 로그인 버튼" />
+</a>
+
 <p id="token-result"></p>
 
 <script>
+
+
+
   function loginWithKakao() {
     Kakao.Auth.authorize({
       redirectUri: 'https://main.d2ri753qyvsils.amplifyapp.com/callback.html',
