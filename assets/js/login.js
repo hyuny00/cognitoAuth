@@ -108,7 +108,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         console.log('User logged in with an external provider:', identityProvider.Value);
                         
         // 외부 공급자 로그아웃 처리 (예: Google 로그아웃)
-        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com/login.html')}`;
+        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
         window.location.href = logoutUrl; // Cognito 로그아웃
     }else{
         const cognitoUser = getCurrentUser();
