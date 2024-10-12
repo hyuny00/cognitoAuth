@@ -109,7 +109,12 @@ document.getElementById("logoutButton").addEventListener("click", function () {
 
     if (identityProvider.toLowerCase() === 'google') {
         console.log('User logged in with Google');
-  
+
+        // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
+        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+        window.location.href = logoutUrl;
+
+        /*
         // Google 토큰 취소
         fetch(`https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`, {
             method: 'POST',
@@ -131,6 +136,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
             const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=23h323cjmckg249ncd11fgh36r&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
             window.location.href = logoutUrl;
          });
+         */
     }else{
         const cognitoUser = getCurrentUser();
 
