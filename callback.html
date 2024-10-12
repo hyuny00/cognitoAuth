@@ -27,7 +27,7 @@
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ code: query })  // JSON 형식으로 데이터 전송
+      body: JSON.stringify({ identityProvider: 'kakao', code: query })  // JSON 형식으로 데이터 전송
     })
     .then(response => response.json())
     .then(data =>  
