@@ -103,6 +103,8 @@ document.getElementById("logoutButton").addEventListener("click", function () {
     
     const cognitoUser = getCurrentUser();
 
+    console.log(cognitoUser);
+
     // 로컬 스토리지에서 토큰 삭제
     localStorage.removeItem('accessToken');
     localStorage.removeItem('idToken');
@@ -112,10 +114,6 @@ document.getElementById("logoutButton").addEventListener("click", function () {
 
     if (identityProvider.toLowerCase() === 'google') {
         console.log('User logged in with Google');
-
-        // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-       // const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
-       // window.location.href = logoutUrl;
 
         
         // Google 토큰 취소
