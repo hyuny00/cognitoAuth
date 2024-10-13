@@ -1,7 +1,7 @@
 // AWS Cognito 구성 설정
 const poolData = {
-    UserPoolId: 'ap-northeast-2_kRrtG4Chf', // AWS Cognito User Pool ID
-    ClientId: '13pl1jjibcgmvan33i0lnsh3ef' // AWS Cognito App Client ID
+    UserPoolId: 'ap-northeast-2_2b6h6ORAM', // AWS Cognito User Pool ID
+    ClientId: '6kcegkothq1lmddpivs859mucq' // AWS Cognito App Client ID
 };
 
 // Cognito User Pool 객체 생성
@@ -111,7 +111,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         console.log('User logged in with Google');
 
         // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=13pl1jjibcgmvan33i0lnsh3ef&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
         window.location.href = logoutUrl;
 
         /*
@@ -133,7 +133,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         })
         .finally(() => {
             // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-            const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=13pl1jjibcgmvan33i0lnsh3ef&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+            const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
             window.location.href = logoutUrl;
          });
          */
