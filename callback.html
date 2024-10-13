@@ -36,6 +36,8 @@
           localStorage.setItem('accessToken', data.tokens.AccessToken);
           localStorage.setItem('idToken', data.tokens.IdToken);
           localStorage.setItem('refreshToken', data.tokens.RefreshToken);
+          localStorage.setItem('kakaoAccessToken', data.kakaoAccessToken);
+          
 
           // 다른 페이지로 이동
           window.location.href = 'auth.html'; // 다음 페이지의 URL로 변경하세요
