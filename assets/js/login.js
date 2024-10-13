@@ -75,19 +75,6 @@ function getCurrentUser() {
 document.getElementById("logoutButton").addEventListener("click", function () {
 
 
-    // AWS SDK 설정
-    AWS.config.update({
-        region: 'ap-northeast-2', // ex: 'us-east-1'
-        credentials: new AWS.CognitoIdentityCredentials({
-            IdentityPoolId: 'ap-northeast-2_2b6h6ORAM' // Identity Pool ID
-        })
-    });
-
-    // Cognito Identity Service Provider 생성
-    const cognito = new AWS.CognitoIdentityServiceProvider();
-
-    console.log(cognito);
-
     const idToken = localStorage.getItem('idToken');
     if (!idToken) {
         console.error('No ID token found');
@@ -121,12 +108,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
 
     console.log(cognitoUser);
 
-    // 로컬 스토리지에서 토큰 삭제
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('idToken');
-    localStorage.removeItem('refreshToken');
-
-    localStorage.removeItem('username');
+ 
 
     if (identityProvider.toLowerCase() === 'google') {
         console.log('User logged in with Google');
@@ -149,32 +131,36 @@ document.getElementById("logoutButton").addEventListener("click", function () {
             console.error('Error revoking Google token:', error);
         })
         .finally(() => {
+
+            // 로컬 스토리지에서 토큰 삭제
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('idToken');
+            localStorage.removeItem('refreshToken');
+
+            localStorage.removeItem('username');
             // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
             const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
             window.location.href = logoutUrl;
          });
          
     }else{
-        
-        const params = {
-            AccessToken: accessToken
-        };
-    
-        try {
-            cognito.globalSignOut(params);
-            console.log('User globally signed out.');
-        } catch (error) {
-            console.error('Error signing out globally:', error);
-        }
-/*
+     
+
         if (cognitoUser) {
             cognitoUser.signOut(); // 로그아웃 처리
+
+            // 로컬 스토리지에서 토큰 삭제
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('idToken');
+            localStorage.removeItem('refreshToken');
+
+            localStorage.removeItem('username');
     
             document.getElementById("logoutStatus").innerText = "You have been logged out.";
         } else {
             document.getElementById("logoutStatus").innerText = "No user is logged in.";
         }
-*/
+
     }
 
   
