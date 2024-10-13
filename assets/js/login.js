@@ -111,7 +111,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         console.log('User logged in with Google');
 
         // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-        const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+        const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
         window.location.href = logoutUrl;
 
         /*
@@ -133,7 +133,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         })
         .finally(() => {
             // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-            const logoutUrl = `https://tarrotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+            const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
             window.location.href = logoutUrl;
          });
          */
