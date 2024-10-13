@@ -169,7 +169,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
                 }
             })
             .then(response => {
-                console.log(response.json());
+                console.log("kkk."+response.ok);
                 if (!response.ok) {
                     throw new Error('kakao token revocation failed');
                 }
