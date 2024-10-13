@@ -140,7 +140,9 @@ document.getElementById("logoutButton").addEventListener("click", function () {
             window.location.href = logoutUrl;
          });
          
-    }else{
+    }
+    
+    else{
         const cognitoUser = getCurrentUser();
 
         if (cognitoUser) {
