@@ -101,7 +101,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         }
     }
     
-
+    const cognitoUser = getCurrentUser();
 
     // 로컬 스토리지에서 토큰 삭제
     localStorage.removeItem('accessToken');
@@ -140,10 +140,8 @@ document.getElementById("logoutButton").addEventListener("click", function () {
             window.location.href = logoutUrl;
          });
          
-    }
-    
-    else{
-        const cognitoUser = getCurrentUser();
+    }else{
+       
 
         if (cognitoUser) {
             cognitoUser.signOut(); // 로그아웃 처리
