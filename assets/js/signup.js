@@ -4,8 +4,8 @@
 
 // AWS Cognito 구성 설정
 const poolData = {
-    UserPoolId: 'ap-northeast-2_qHoUh9Ggs', // AWS Cognito User Pool ID
-    ClientId: '23h323cjmckg249ncd11fgh36r' // AWS Cognito App Client ID
+    UserPoolId: 'ap-northeast-2_kRrtG4Chf', // AWS Cognito User Pool ID
+    ClientId: '13pl1jjibcgmvan33i0lnsh3ef' // AWS Cognito App Client ID
 };
 // Cognito User Pool 객체 생성
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
