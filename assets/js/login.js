@@ -160,6 +160,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         } else {
 
             const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
+            console.log('kakaoAccessToken:'+kakaoAccessToken);
             // 카카오 토큰 취소
             fetch('https://kapi.kakao.com/v1/user/logout', {
                 method: 'POST',
@@ -187,7 +188,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
                 localStorage.removeItem('username');
               
                 
-                window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
+                //window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
              });
             
 
