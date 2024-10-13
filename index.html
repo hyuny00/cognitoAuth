@@ -33,6 +33,7 @@
   function loginWithKakao() {
     Kakao.Auth.authorize({
       redirectUri: 'https://main.d2ri753qyvsils.amplifyapp.com/callback.html',
+      prompt:'login'
     });
   }
 
