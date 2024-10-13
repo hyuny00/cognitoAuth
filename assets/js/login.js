@@ -4,6 +4,8 @@ const poolData = {
     ClientId: '6kcegkothq1lmddpivs859mucq' // AWS Cognito App Client ID
 };
 
+
+
 // Cognito User Pool 객체 생성
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
@@ -72,13 +74,27 @@ function getCurrentUser() {
 
 document.getElementById("logoutButton").addEventListener("click", function () {
 
+
+    // AWS SDK 설정
+    AWS.config.update({
+        region: 'ap-northeast-2', // ex: 'us-east-1'
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: 'ap-northeast-2_2b6h6ORAM' // Identity Pool ID
+        })
+    });
+
+    // Cognito Identity Service Provider 생성
+    const cognito = new AWS.CognitoIdentityServiceProvider();
+
+    console.log(cognito);
+
     const idToken = localStorage.getItem('idToken');
     if (!idToken) {
         console.error('No ID token found');
         return;
     }
 
-    //const accessToken = localStorage.getItem('accessToken');
+    const accessToken = localStorage.getItem('accessToken');
 
              
 
@@ -139,8 +155,17 @@ document.getElementById("logoutButton").addEventListener("click", function () {
          });
          
     }else{
-        const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
-        window.location.href = logoutUrl;
+        
+        const params = {
+            AccessToken: accessToken
+        };
+    
+        try {
+            cognito.globalSignOut(params);
+            console.log('User globally signed out.');
+        } catch (error) {
+            console.error('Error signing out globally:', error);
+        }
 /*
         if (cognitoUser) {
             cognitoUser.signOut(); // 로그아웃 처리
