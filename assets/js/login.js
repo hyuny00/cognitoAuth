@@ -139,8 +139,9 @@ document.getElementById("logoutButton").addEventListener("click", function () {
          });
          
     }else{
-       
-
+        const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+        window.location.href = logoutUrl;
+/*
         if (cognitoUser) {
             cognitoUser.signOut(); // 로그아웃 처리
     
@@ -148,7 +149,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         } else {
             document.getElementById("logoutStatus").innerText = "No user is logged in.";
         }
-
+*/
     }
 
   
