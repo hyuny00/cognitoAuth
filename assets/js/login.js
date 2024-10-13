@@ -156,43 +156,47 @@ document.getElementById("logoutButton").addEventListener("click", function () {
 
             localStorage.removeItem('username');
     
-            document.getElementById("logoutStatus").innerText = "You have been logged out.";
+            //document.getElementById("logoutStatus").innerText = "You have been logged out.";
+            window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
         } else {
 
             const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
-            console.log('kakaoAccessToken:'+kakaoAccessToken);
-            // 카카오 토큰 취소
-            fetch('https://kapi.kakao.com/v1/user/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${kakaoAccessToken}`
-                }
-            })
-            .then(response => {
-                console.log("kkk."+response.ok);
-                if (!response.ok) {
-                    throw new Error('kakao token revocation failed');
-                }
-      
-                console.log('kakao token revoked successfully');
-            }) 
-            .catch(error => {
-                console.error('Error revoking kakao token:', error);
-            })
-            .finally(() => {
 
-                // 로컬 스토리지에서 토큰 삭제
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('idToken');
-                localStorage.removeItem('refreshToken');
-                localStorage.removeItem('kakaoAccessToken');
-    
-                localStorage.removeItem('username');
-              
+            if(kakaoAccessToken){
+                // 카카오 토큰 취소
+                fetch('https://kapi.kakao.com/v1/user/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${kakaoAccessToken}`
+                    }
+                })
+                .then(response => {
+                    console.log("kkk."+response.ok);
+                    if (!response.ok) {
+                        throw new Error('kakao token revocation failed');
+                    }
+
+                    console.log('kakao token revoked successfully');
+                }) 
+                .catch(error => {
+                    console.error('Error revoking kakao token:', error);
+                })
+                .finally(() => {
+
+                    // 로컬 스토리지에서 토큰 삭제
+                    localStorage.removeItem('accessToken');
+                    localStorage.removeItem('idToken');
+                    localStorage.removeItem('refreshToken');
+                    localStorage.removeItem('kakaoAccessToken');
+
+                    localStorage.removeItem('username');
                 
-                //window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
-             });
-            
+                    
+                    window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
+                });
+
+            }
+           
 
             //document.getElementById("logoutStatus").innerText = "No user is logged in.";
         }
