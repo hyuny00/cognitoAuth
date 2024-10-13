@@ -78,13 +78,16 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         return;
     }
 
-    const accessToken = localStorage.getItem('accessToken');
+    //const accessToken = localStorage.getItem('accessToken');
 
              
 
     // ID 토큰 디코딩
     // ID 토큰 디코딩
     const payload = JSON.parse(atob(idToken.split('.')[1]));
+
+
+    const googleAccessToken=payload['custom:access_token'];
     
     // identityProvider 확인 로직 수정
     let identityProvider = 'Cognito';
@@ -111,12 +114,12 @@ document.getElementById("logoutButton").addEventListener("click", function () {
         console.log('User logged in with Google');
 
         // Google 토큰 취소 시도 후 항상 Cognito 로그아웃 실행
-        const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
-        window.location.href = logoutUrl;
+       // const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+       // window.location.href = logoutUrl;
 
-        /*
+        
         // Google 토큰 취소
-        fetch(`https://accounts.google.com/o/oauth2/revoke?token=${accessToken}`, {
+        fetch(`https://accounts.google.com/o/oauth2/revoke?token=${googleAccessToken}`, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -136,7 +139,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
             const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
             window.location.href = logoutUrl;
          });
-         */
+         
     }else{
         const cognitoUser = getCurrentUser();
 
