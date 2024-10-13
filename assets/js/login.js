@@ -169,10 +169,11 @@ document.getElementById("logoutButton").addEventListener("click", function () {
                 }
             })
             .then(response => {
-                console.log("response,,:"+response);
+                console.log(response.json());
                 if (!response.ok) {
                     throw new Error('kakao token revocation failed');
                 }
+      
                 console.log('kakao token revoked successfully');
             }) 
             .catch(error => {
