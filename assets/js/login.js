@@ -169,6 +169,7 @@ document.getElementById("logoutButton").addEventListener("click", function () {
                 }
             })
             .then(response => {
+                console.log("response,,:"+response);
                 if (!response.ok) {
                     throw new Error('kakao token revocation failed');
                 }
