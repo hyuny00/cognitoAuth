@@ -427,3 +427,33 @@ function cognitoCallback() {
     }
 
 }
+
+
+function kakaoCallback() {
+
+    // URL에서 파라메터 가져오기
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get('code');
+
+
+    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ identityProvider: 'kakao', code: query })  // JSON 형식으로 데이터 전송
+    })
+    .then(response => response.json())
+    .then(data =>  {
+        // JWT 저장
+        localStorage.setItem('accessToken', data.tokens.AccessToken);
+        localStorage.setItem('idToken', data.tokens.IdToken);
+        localStorage.setItem('refreshToken', data.tokens.RefreshToken);
+        localStorage.setItem('kakaoAccessToken', data.kakaoAccessToken);
+        
+
+        // 다른 페이지로 이동
+        window.location.href = 'auth.html'; // 다음 페이지의 URL로 변경하세요
+    
+     }).catch(error => console.error('Error:', error));
+}

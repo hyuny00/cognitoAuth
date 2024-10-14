@@ -5,49 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+     <!-- AWS SDK -->
+     <script src="assets/js/aws/aws-cognito-sdk.min.js"></script>
+     <!-- Amazon Cognito Identity SDK -->
+     <script src="assets/js/aws/amazon-cognito-identity.min.js"></script>
+     <script src="assets/js/auth.js"></script>
 </head>
 <body>
-  <h1>Parameter from URL</h1>
-  <p id="aaccessCode"></p>
-
-  <div id="result"></div>
-
   <script>
-    // URL에서 파라메터 가져오기
-    const urlParams = new URLSearchParams(window.location.search);
-    const query = urlParams.get('code');
-
-    // 가져온 파라메터를 HTML에 표시
-    document.getElementById('aaccessCode').textContent = `Query parameter: ${query}`;
-
-   
-
-    fetch('https://wsuvxybai0.execute-api.ap-northeast-2.amazonaws.com/prod/auth', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ identityProvider: 'kakao', code: query })  // JSON 형식으로 데이터 전송
-    })
-    .then(response => response.json())
-    .then(data =>  
-        {
-          // JWT 저장
-          localStorage.setItem('accessToken', data.tokens.AccessToken);
-          localStorage.setItem('idToken', data.tokens.IdToken);
-          localStorage.setItem('refreshToken', data.tokens.RefreshToken);
-          localStorage.setItem('kakaoAccessToken', data.kakaoAccessToken);
-          
-
-          // 다른 페이지로 이동
-          window.location.href = 'auth.html'; // 다음 페이지의 URL로 변경하세요
-          
-          //document.getElementById('result').textContent = `Success: ${JSON.stringify(data)}`}
-        })
-    .catch(error => console.error('Error:', error));
-
-
-
+    kakaoCallback();
   </script>
 </body>
 </html>
