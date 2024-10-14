@@ -13,6 +13,27 @@ function toUsername(email) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    
+    const findPasswordButton = document.getElementById('findPasswordButton');
+    if (findPasswordButton) {
+
+        findPasswordButton.addEventListener('click', function() {
+            findPassword();
+        });
+      
+    }
+
+    const resetPasswordButton = document.getElementById('resetPasswordButton');
+    if (resetPasswordButton) {
+
+        resetPasswordButton.addEventListener('click', function() {
+            resetPassword() 
+        });
+      
+    }
+   
+
     // Login
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
@@ -456,4 +477,51 @@ function kakaoCallback() {
         window.location.href = 'auth.html'; // 다음 페이지의 URL로 변경하세요
     
      }).catch(error => console.error('Error:', error));
+}
+
+
+//비밀번호찿기
+function findPassword() {
+
+
+    const cognito = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const userData = {
+        Username: 'dhpark-at-futechsoft.com', // 사용자의 이메일 또는 사용자 이름
+        Pool: cognito,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.forgotPassword({
+        onSuccess: function (data) {
+            console.log('비밀번호 복구 이메일이 전송되었습니다.', data);
+        },
+        onFailure: function (err) {
+            console.error(err);
+        },
+    });
+}
+
+function resetPassword() {
+    const verificationCode = '815184'; // 사용자가 입력한 인증 코드
+    const newPassword = 'NewPassword123!'; // 사용자가 설정할 새로운 비밀번호
+
+    const cognito = new AmazonCognitoIdentity.CognitoUserPool(poolData);
+
+    const userData = {
+        Username: 'dhpark-at-futechsoft.com', // 사용자의 이메일 또는 사용자 이름
+        Pool: cognito,
+    };
+
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+
+    cognitoUser.confirmPassword(verificationCode, newPassword, {
+        onSuccess: function () {
+            console.log('비밀번호가 성공적으로 재설정되었습니다.');
+        },
+        onFailure: function (err) {
+            console.error(err);
+        },
+    });
 }
