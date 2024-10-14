@@ -364,3 +364,66 @@ function getUserInfo() {
         }
     }
 }
+
+
+function cognitoCallback() {
+
+
+    // URL에서 authorization code 추출
+    const urlParams = new URLSearchParams(window.location.search);
+    const authorizationCode = urlParams.get('code');
+
+    // Cognito 도메인 및 클라이언트 정보 설정
+    const clientId = poolData.ClientId;
+    const cognitoDomain = 'https://tarotok.auth.ap-northeast-2.amazoncognito.com';
+    const redirectUri = 'https://main.d2ri753qyvsils.amplifyapp.com/cognitoCallback.html'; // 콜백 URL
+
+
+
+    if (authorizationCode) {
+
+
+        // Token 교환을 위한 요청 준비
+        const tokenUrl = `${cognitoDomain}/oauth2/token`;
+
+        const data = new URLSearchParams();
+        data.append('grant_type', 'authorization_code');
+        data.append('client_id', clientId);
+        data.append('code', authorizationCode);
+        data.append('redirect_uri', redirectUri);
+
+        // Token 요청
+        fetch(tokenUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: data.toString(),
+        })
+        .then(response => response.json())
+        .then(tokenResponse => {
+            // Token을 성공적으로 받으면 처리 (예: localStorage에 저장)
+            console.log(tokenResponse);
+            const accessToken = tokenResponse.access_token || '';
+            const idToken = tokenResponse.id_token || '';
+            const refreshToken = tokenResponse.refresh_token || '';
+
+
+            if (accessToken) {
+                localStorage.setItem('accessToken', accessToken);
+                localStorage.setItem('idToken', idToken);
+                localStorage.setItem('refreshToken', refreshToken);
+                
+                window.location.href = '/auth.html';
+            } else {
+                console.error('Access token missing');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching token:', error);
+        });
+    } else {
+        console.error('Authorization code not found');
+    }
+
+}
