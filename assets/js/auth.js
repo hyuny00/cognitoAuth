@@ -12,6 +12,8 @@ function toUsername(email) {
     return email.replace('@', '-at-');
 }
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
     
@@ -481,13 +483,14 @@ function kakaoCallback() {
 
 
 //비밀번호찿기
-function findPassword() {
+function findPassword(email) {
 
+    const username= toUsername(email);
 
     const cognito = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     const userData = {
-        Username: 'dhpark-at-futechsoft.com', // 사용자의 이메일 또는 사용자 이름
+        Username: username, 
         Pool: cognito,
     };
 
@@ -503,14 +506,17 @@ function findPassword() {
     });
 }
 
-function resetPassword() {
-    const verificationCode = '815184'; // 사용자가 입력한 인증 코드
-    const newPassword = 'NewPassword123!'; // 사용자가 설정할 새로운 비밀번호
+function resetPassword(email, verificationCode, newPassword) {
+
+    const username= toUsername(email);
+
+    //const verificationCode = '815184'; // 사용자가 입력한 인증 코드
+    //const newPassword = 'NewPassword123!'; // 사용자가 설정할 새로운 비밀번호
 
     const cognito = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
     const userData = {
-        Username: 'dhpark-at-futechsoft.com', // 사용자의 이메일 또는 사용자 이름
+        Username: username, // 사용자의 이메일 또는 사용자 이름
         Pool: cognito,
     };
 
