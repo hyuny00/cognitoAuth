@@ -4,6 +4,8 @@ const poolData = {
     ClientId: '6kcegkothq1lmddpivs859mucq'
 };
 
+const mainPage='https://main.d2ri753qyvsils.amplifyapp.com';
+
 const userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
 function toUsername(email) {
@@ -95,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('User logged in with Cognito');
                 cognitoUser.signOut();
                 clearLocalStorage();
-                window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
+                window.location.href = mainPage;
             } else {
                 
                 const kakaoAccessToken = localStorage.getItem('kakaoAccessToken');
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         clearLocalStorage();;
                         localStorage.removeItem('kakaoAccessToken');
                                          
-                        window.location.href = 'https://main.d2ri753qyvsils.amplifyapp.com';
+                        window.location.href = mainPage;
                     });
     
                 }
@@ -319,8 +321,10 @@ function confirmSignUp(username, code) {
 }
 
 function logoutCognitoHostedUI() {
+    const clientId = poolData.ClientId;
+    
     clearLocalStorage();
-    const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=6kcegkothq1lmddpivs859mucq&logout_uri=${encodeURIComponent('https://main.d2ri753qyvsils.amplifyapp.com')}`;
+    const logoutUrl = `https://tarotok.auth.ap-northeast-2.amazoncognito.com/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(mainPage)}`;
     window.location.href = logoutUrl;
 }
 
