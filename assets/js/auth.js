@@ -334,3 +334,33 @@ function clearLocalStorage() {
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('username');
 }
+
+
+function decodeJwtPayload(token) {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+  
+    return JSON.parse(jsonPayload);
+  }
+
+function getUserInfo() {
+    const idToken = localStorage.getItem('idToken'); // 저장된 ID Token을 가져옵니다.
+
+    if (idToken) {
+
+        const payload= decodeJwtPayload(idToken);
+        if(payload){
+            console.log('Payload:', payload);
+
+            const username = payload['email'];
+            const nickname = payload['nickname']
+
+            document.getElementById('usernm').innerText = 'login success, token: ' + username+'|'+ nickname;
+        } else {
+            console.error('Invalid JWT structure');
+        }
+    }
+}
