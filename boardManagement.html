@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script defer src="assets/js/boardManagement.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Board Management</h1>
+
+        <!-- 게시판 생성 -->
+        <div class="mb-4">
+            <h3>Create Board</h3>
+            <form id="createBoardForm">
+                <div class="mb-3">
+                    <label for="boardType" class="form-label">Board Type</label>
+                    <input type="text" class="form-control" id="boardType" required>
+                </div>
+                <div class="mb-3">
+                    <label for="boardDescription" class="form-label">Board Description</label>
+                    <textarea class="form-control" id="boardDescription" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create Board</button>
+            </form>
+        </div>
+
+        <!-- 게시판 수정 -->
+        <div class="mb-4">
+            <h3>Edit Board</h3>
+            <form id="editBoardForm">
+                <div class="mb-3">
+                    <label for="editBoardId" class="form-label">Board ID</label>
+                    <input type="text" class="form-control" id="editBoardId" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newBoardType" class="form-label">New Board Type</label>
+                    <input type="text" class="form-control" id="newBoardType" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newBoardDescription" class="form-label">New Board Description</label>
+                    <textarea class="form-control" id="newBoardDescription" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Edit Board</button>
+            </form>
+        </div>
+
+        <!-- 게시판 삭제 -->
+        <div class="mb-4">
+            <h3>Delete Board</h3>
+            <form id="deleteBoardForm">
+                <div class="mb-3">
+                    <label for="deleteBoardId" class="form-label">Board ID</label>
+                    <input type="text" class="form-control" id="deleteBoardId" required>
+                </div>
+                <button type="submit" class="btn btn-danger">Delete Board</button>
+            </form>
+        </div>
+
+        <!-- 게시판 조회 -->
+        <div class="mb-4">
+            <h3>View Boards</h3>
+            <button id="viewBoardsBtn" class="btn btn-success">View All Boards</button>
+            <ul id="boardList" class="list-group mt-3"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
