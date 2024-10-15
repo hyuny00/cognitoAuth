@@ -531,3 +531,71 @@ function resetPassword(email, verificationCode, newPassword) {
         },
     });
 }
+
+
+
+
+
+
+
+
+
+// API 요청 함수
+function makeApiRequest(accessToken) {
+
+
+    fetch('https://your-api-id.execute-api.region.amazonaws.com/your-stage/your-resource', {
+        method: 'GET', // 요청 메서드
+        headers: {
+            'Authorization': accessToken, // Access Token 포함
+            'Content-Type': 'application/json' // Content-Type 설정
+        }
+    })
+    .then(response => {
+        if (response.status === 401) {
+            // Access Token이 만료된 경우
+            console.log("Access Token expired. Refreshing...");
+            refreshAccessToken(); // 새로운 Access Token 요청
+        } else if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('API Response:', data);
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+// Refresh Token으로 새로운 Access Token 요청
+function refreshAccessToken() {
+    const refreshToken = localStorage.getItem('refreshToken'); // 로컬 스토리지에서 Refresh Token 가져오기
+    const username = localStorage.getItem('username');
+    
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser({
+        Username: username,
+        Pool: userPool
+    });
+
+    cognitoUser.refreshSession(new AmazonCognitoIdentity.CognitoRefreshToken({ RefreshToken: refreshToken }), (err, session) => {
+        if (err) {
+            console.error("Failed to refresh session:", err);
+            // Refresh Token이 만료된 경우 로그인 페이지로 리다이렉트
+            if (err.code === 'NotAuthorizedException' || err.message.includes('Refresh Token has expired')) {
+                alert("Session expired. Redirecting to login page.");
+                window.location.href = '/login.html'; // 로그인 페이지로 리다이렉트
+            }
+            return;
+        }
+        
+        // 새로운 Access Token 저장
+        const newAccessToken = session.getAccessToken().getJwtToken();
+        localStorage.setItem('accessToken', newAccessToken);
+        console.log("New Access Token obtained and stored.");
+
+        // 새로운 Access Token으로 API 요청을 다시 시도합니다.
+        makeApiRequest(newAccessToken); // 다시 요청 보내기
+    });
+}
