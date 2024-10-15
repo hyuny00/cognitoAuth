@@ -35,13 +35,14 @@
         <div class="mb-4">
             <h3>Edit Board</h3>
             <form id="editBoardForm">
-                <div class="mb-3">
-                    <label for="editBoardId" class="form-label">Board ID</label>
-                    <input type="text" class="form-control" id="editBoardId" required>
-                </div>
+               
                 <div class="mb-3">
                     <label for="newBoardType" class="form-label">New Board Type</label>
                     <input type="text" class="form-control" id="newBoardType" required>
+                </div>
+                <div class="mb-3">
+                    <label for="newBoardName" class="form-label">New Board Name</label>
+                    <input type="text" class="form-control" id="newBoardName" required>
                 </div>
                 <div class="mb-3">
                     <label for="newBoardDescription" class="form-label">New Board Description</label>
@@ -56,8 +57,8 @@
             <h3>Delete Board</h3>
             <form id="deleteBoardForm">
                 <div class="mb-3">
-                    <label for="deleteBoardId" class="form-label">Board ID</label>
-                    <input type="text" class="form-control" id="deleteBoardId" required>
+                    <label for="deleteBoardType" class="form-label">Board ID</label>
+                    <input type="text" class="form-control" id="deleteBoardType" required>
                 </div>
                 <button type="submit" class="btn btn-danger">Delete Board</button>
             </form>

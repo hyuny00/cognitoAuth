@@ -42,8 +42,11 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
 // 게시판 수정
 document.getElementById('editBoardForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const boardId = document.getElementById('editBoardId').value;
+
     const newBoardType = document.getElementById('newBoardType').value;
+
+    const newBoardName = document.getElementById('newBoardName').value;
+    
     const newDescription = document.getElementById('newBoardDescription').value;
 
     const idToken = localStorage.getItem('idToken');
@@ -52,13 +55,13 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
         return;
     }
 
-    const response = await fetch(`${apiUrl}/${boardId}`, {
+    const response = await fetch(`${apiUrl}/${newBoardType}`, {
         method: 'PUT',
         headers: {
             'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ boardType: newBoardType, description: newDescription })
+        body: JSON.stringify({ boardName:newBoardName, description: newDescription })
     });
 
     if (response.ok) {
@@ -72,7 +75,7 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
 // 게시판 삭제
 document.getElementById('deleteBoardForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const boardId = document.getElementById('deleteBoardId').value;
+    const boardType = document.getElementById('deleteBoardType').value;
 
     const idToken = localStorage.getItem('idToken');
     if (!idToken) {
@@ -80,7 +83,7 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
         return;
     }
 
-    const response = await fetch(`${apiUrl}/${boardId}`, {
+    const response = await fetch(`${apiUrl}/${boardType}`, {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${idToken}`,
