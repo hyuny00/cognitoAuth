@@ -13,21 +13,29 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
         alert('로그인이 필요합니다.');
         return;
     }
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${idToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ boardType, boardName, description }),
+        });
 
-    const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ boardType, boardName, description })
-    });
-
-    if (response.ok) {
-        alert('게시판이 성공적으로 생성되었습니다.');
+        if (response.ok) {
+            alert('게시판이 성공적으로 생성되었습니다.');
+            document.getElementById('createBoardForm').reset();
+        } else {
+            const errorMessage = await response.text(); 
+            throw new Error(`Error: ${response.status} - ${errorMessage}`);
+        }
+    } catch (error) {
+        
+        console.error('Fetch error:', error.message);
+        alert('게시판생성이 실패했습니다.');
         document.getElementById('createBoardForm').reset();
-    } else {
-        alert('게시판 생성에 실패했습니다.');
+       
     }
 });
 
@@ -113,7 +121,7 @@ document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
 
         boards.forEach(board => {
             const li = document.createElement('li');
-            li.textContent = `Name: ${board.BoardName}, Description: ${board.Description}`;
+            li.textContent = `PK: ${board.PK}, Name: ${board.BoardName}, Description: ${board.Description}`;
             li.classList.add('list-group-item');
             boardList.appendChild(li);
         });
