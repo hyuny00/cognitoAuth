@@ -16,7 +16,6 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
 
     const response = await fetch(apiUrl, {
         method: 'POST',
-        credentials: 'include',
         headers: {
             'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
@@ -39,8 +38,8 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
     const newBoardType = document.getElementById('newBoardType').value;
     const newDescription = document.getElementById('newBoardDescription').value;
 
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
         alert('로그인이 필요합니다.');
         return;
     }
@@ -48,7 +47,7 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
     const response = await fetch(`${apiUrl}/${boardId}`, {
         method: 'PUT',
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ boardType: newBoardType, description: newDescription })
@@ -67,8 +66,8 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
     e.preventDefault();
     const boardId = document.getElementById('deleteBoardId').value;
 
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
         alert('로그인이 필요합니다.');
         return;
     }
@@ -76,7 +75,7 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
     const response = await fetch(`${apiUrl}/${boardId}`, {
         method: 'DELETE',
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
         }
     });
@@ -91,8 +90,8 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
 
 // 게시판 조회
 document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
         alert('로그인이 필요합니다.');
         return;
     }
@@ -100,7 +99,7 @@ document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
     const response = await fetch(apiUrl, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
         }
     });
