@@ -16,6 +16,7 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
 
     const response = await fetch(apiUrl, {
         method: 'POST',
+        credentials: 'include', 
         headers: {
             'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json'
