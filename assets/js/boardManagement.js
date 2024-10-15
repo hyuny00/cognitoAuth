@@ -87,7 +87,7 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
             'Content-Type': 'application/json'
         }
     });
-
+    console.log(response);
     if (response.ok) {
         alert('게시판이 성공적으로 삭제되었습니다.');
         document.getElementById('deleteBoardForm').reset();
