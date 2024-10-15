@@ -18,7 +18,7 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
         method: 'POST',
         credentials: 'include', 
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
+            'Authorization': accessToken,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ boardType, boardName, description })
