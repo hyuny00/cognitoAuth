@@ -55,20 +55,28 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
         return;
     }
 
-    const response = await fetch(`${apiUrl}/${newBoardType}`, {
-        method: 'PUT',
-        headers: {
-            'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ boardName:newBoardName, description: newDescription })
-    });
+    try {
+        const response = await fetch(`${apiUrl}/${newBoardType}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${idToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ boardName:newBoardName, description: newDescription })
+        });
 
-    if (response.ok) {
-        alert('게시판이 성공적으로 수정되었습니다.');
+        if (response.ok) {
+            alert('게시판이 성공적으로 수정되었습니다.');
+            document.getElementById('editBoardForm').reset();
+        } else {
+            throw new Error(`Error: ${response.status} - ${errorMessage}`);
+        }
+    } catch (error) {
+        
+        console.error('Fetch error:', error.message);
+        alert('게시판수정에 실패했습니다.');
         document.getElementById('editBoardForm').reset();
-    } else {
-        alert('게시판 수정에 실패했습니다.');
+       
     }
 });
 
@@ -82,20 +90,27 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
         alert('로그인이 필요합니다.');
         return;
     }
+    try {
+        const response = await fetch(`${apiUrl}/${boardType}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${idToken}`,
+                'Content-Type': 'application/json'
+            }
+        });
 
-    const response = await fetch(`${apiUrl}/${boardType}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
+        if (response.ok) {
+            alert('게시판이 성공적으로 삭제되었습니다.');
+            document.getElementById('deleteBoardForm').reset();
+        } else {
+            throw new Error(`Error: ${response.status} - ${errorMessage}`);
         }
-    });
-    console.log(response.message);
-    if (response.ok) {
-        alert('게시판이 성공적으로 삭제되었습니다.');
-        document.getElementById('deleteBoardForm').reset();
-    } else {
+    } catch (error) {
+        
+        console.error('Fetch error:', error.message);
         alert('게시판 삭제에 실패했습니다.');
+
+       
     }
 });
 
@@ -107,28 +122,36 @@ document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
         return;
     }
 
-    const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${idToken}`,
-            'Content-Type': 'application/json'
-        }
-    });
+    try {
+            const response = await fetch(apiUrl, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${idToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-    if (response.ok) {
-        const boards = await response.json();
+            if (response.ok) {
+                const boards = await response.json();
 
-        console.log(boards);
-        const boardList = document.getElementById('boardList');
-        boardList.innerHTML = '';
+                console.log(boards);
+                const boardList = document.getElementById('boardList');
+                boardList.innerHTML = '';
 
-        boards.forEach(board => {
-            const li = document.createElement('li');
-            li.textContent = `PK: ${board.PK}, Name: ${board.BoardName}, Description: ${board.Description}`;
-            li.classList.add('list-group-item');
-            boardList.appendChild(li);
-        });
-    } else {
+                boards.forEach(board => {
+                    const li = document.createElement('li');
+                    li.textContent = `PK: ${board.PK}, Name: ${board.BoardName}, Description: ${board.Description}`;
+                    li.classList.add('list-group-item');
+                    boardList.appendChild(li);
+                });
+            } else {
+                throw new Error(`Error: ${response.status} - ${errorMessage}`);
+            }
+    } catch (error) {
+    
+        console.error('Fetch error:', error.message);
         alert('게시판 조회에 실패했습니다.');
-    }
+
+        
+    }        
 });
