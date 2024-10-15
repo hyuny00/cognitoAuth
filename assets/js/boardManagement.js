@@ -106,12 +106,14 @@ document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
 
     if (response.ok) {
         const boards = await response.json();
+
+        console.log(boards);
         const boardList = document.getElementById('boardList');
         boardList.innerHTML = '';
 
         boards.forEach(board => {
             const li = document.createElement('li');
-            li.textContent = `ID: ${board.boardId}, Type: ${board.boardType}, Description: ${board.description}`;
+            li.textContent = `Name: ${board.BoardName}, Description: ${board.Description}`;
             li.classList.add('list-group-item');
             boardList.appendChild(li);
         });
