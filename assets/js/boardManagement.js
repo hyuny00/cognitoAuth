@@ -8,17 +8,17 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
     const boardName = document.getElementById('boardName').value;
     const description = document.getElementById('boardDescription').value;
 
-    const accessToken = localStorage.getItem('accessToken');
-    if (!accessToken) {
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
         alert('로그인이 필요합니다.');
         return;
     }
 
     const response = await fetch(apiUrl, {
         method: 'POST',
-        credentials: 'include', 
+        credentials: 'include',
         headers: {
-            'Authorization': accessToken,
+            'Authorization': `Bearer ${idToken}`,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ boardType, boardName, description })
