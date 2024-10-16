@@ -5,6 +5,8 @@ const apiUrlBoard = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com
 
 const apiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/posts';
 
+const replyApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/replies';
+
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -153,16 +155,24 @@ async function fetchPosts(boardType, lastKey = null) {
       //listItem.textContent = post.Title; // 여기서 title은 게시글 제목을 가정 (실제 속성명에 맞게 수정)
   
       // 필요하다면 게시글의 추가 정보를 표시
-       listItem.innerHTML = `<strong>제목 : ${post.Title}</strong><p>내용 : ${post.Content}</p>`;
+      listItem.innerHTML = `
+      <strong>
+          <a href="javascript:void(0);" onclick="readPost('${post.PK}', '${post.SK}')">
+              제목 : ${post.Title}
+          </a>
+      </strong>
+      <p>내용 : ${post.Content}</p>
+   `;
   
       postList.appendChild(listItem); // 리스트에 추가
     });
   }
 
+
   // 초기화 변수
 let lastKey = null;
 
-// 게시글 로드 함수
+
 // 게시글 로드 함수
 function loadPosts() {
     const boardType = document.getElementById('selectedBoard').value;
@@ -190,6 +200,50 @@ function loadPosts() {
 }
 
 
+async function readPost(PK, SK){
+
+    const boardType = PK.split('#')[1];
+    const postId = SK.split('#')[1];
+
+    console.log('postId:'+postId);
+    console.log('boardType:'+boardType);
+
+    const url = new URL(`${apiUrl}/${boardType}/${postId}`);
+    
+  
+    try {
+
+      console.log('readPost....:'+url);
+      const response = await fetch(url);
+      const post = await response.json();
+
+      if (response.ok) {
+
+        const postDetail = document.getElementById('postDetail');
+
+        // 게시물의 세부 정보를 설정합니다.
+        postDetail.innerHTML = `
+            <strong>제목: ${post.Title}</strong><br>
+            <p>내용: ${post.Content}</p><br>
+            <p>작성 날짜: ${new Date(post.CreationDate).toLocaleString()}</p>
+        `;
+        document.getElementById('postId').value=postId;
+        document.getElementById('boardType').value=boardType;
+
+
+        
+       
+      } else {
+        console.error('Error fetching posts:', post.message);
+       
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+ 
+    }
+
+}
+
 /*
 // 스크롤이 끝까지 내려가면 자동으로 다음 페이지 로드
 window.addEventListener('scroll', () => {
@@ -203,20 +257,21 @@ window.addEventListener('scroll', () => {
 document.getElementById('createReplyForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const postId = document.getElementById('postId').value;
+    const boardType = document.getElementById('boardType').value;
     const replyContent = document.getElementById('replyContent').value;
 
      // 로컬스토리지에서 accessToken 가져오기 (Cognito에서 로그인 후 저장된 토큰)
-     const accessToken = localStorage.getItem('accessToken');
-     if (!accessToken) {
+     const idToken = localStorage.getItem('idToken');
+     if (!idToken) {
          alert('로그인이 필요합니다.');
          return;
      }
 
      
-    const response = await fetch(`${apiUrl}/reply/${postId}`, {
+    const response = await fetch(`${replyApiUrl}/${boardType}/${postId}`, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${accessToken}`, // Cognito JWT를 Authorization 헤더에 포함
+            'Authorization': `Bearer ${idToken}`, 
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ content: replyContent })
@@ -229,3 +284,12 @@ document.getElementById('createReplyForm').addEventListener('submit', async (e) 
         alert('댓글 작성에 실패했습니다.');
     }
 });
+
+
+async function replyList(PK, SK){
+
+
+}
+
+
+
