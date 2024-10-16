@@ -295,6 +295,8 @@ async function replyList(){
 
     const url = new URL(`${replyApiUrl}/${boardType}/${postId}`);
 
+    console.log('hh..:'+url);
+
     const replyList = document.getElementById('replyList');
   
     try {
@@ -307,10 +309,7 @@ async function replyList(){
         replies.forEach(reply => {
         
             const listItem = document.createElement('li'); // 혹은 <div>
-            listItem.innerHTML = `
-                    <strong>
-                            제목 : ${reply.Title}
-                    </strong>
+            listItem.innerHTML = `                   
                     <p>내용 : ${reply.Content}</p>
              `;
         
