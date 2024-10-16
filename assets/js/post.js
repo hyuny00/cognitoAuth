@@ -306,6 +306,10 @@ async function replyList(){
       const replies = await response.json();
     
       if (response.ok) {
+
+        // 기존 댓글 목록을 비운다.
+        replyList.innerHTML = ''; 
+        
         replies.forEach(reply => {
         
             const listItem = document.createElement('li'); // 혹은 <div>
