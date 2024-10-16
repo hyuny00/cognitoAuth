@@ -280,14 +280,48 @@ document.getElementById('createReplyForm').addEventListener('submit', async (e) 
     if (response.ok) {
         alert('댓글이 성공적으로 작성되었습니다.');
         document.getElementById('createReplyForm').reset();
+
+        replyList();
     } else {
         alert('댓글 작성에 실패했습니다.');
     }
 });
 
 
-async function replyList(PK, SK){
+async function replyList(){
 
+    const postId = document.getElementById('postId').value;
+    const boardType = document.getElementById('boardType').value;
+
+    const url = new URL(`${replyApiUrl}/${boardType}/${postId}`);
+
+    const replyList = document.getElementById('replyList');
+  
+    try {
+
+
+      const response = await fetch(url);
+      const replies = await response.json();
+    
+      if (response.ok) {
+        replies.forEach(reply => {
+        
+            const listItem = document.createElement('li'); // 혹은 <div>
+            listItem.innerHTML = `
+                    <strong>
+                            제목 : ${reply.Title}
+                    </strong>
+                    <p>내용 : ${reply.Content}</p>
+             `;
+        
+             replyList.appendChild(listItem); // 리스트에 추가
+          });
+       
+      } 
+    } catch (error) {
+      console.error('Network error:', error);
+ 
+    }
 
 }
 
