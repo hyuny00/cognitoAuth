@@ -381,7 +381,7 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 });
 
 
-
+const fileNames = [];
 document.getElementById('fileInput').addEventListener('change', async (event) => {
 
     const idToken = localStorage.getItem('idToken');
@@ -401,12 +401,16 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             return;
         }
 
-
-       
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const timestamp = date.getTime();  // 타임스탬프 (밀리초 단위)
 
         const tempFileName = `${file.name}.TEMP`
 
-        const uploadKey = `uploads/${tempFileName}`; // 업로드할 경로 및 파일 이름 (여기서 원하는 키를 설정)
+        // 타임스탬프를 파일 이름에 추가
+        const uploadKey = `uploads/${year}/${month}/${timestamp}-${tempFileName}`;
+       
 
         console.log(tempFileName+":"+file.type);
 
@@ -429,6 +433,8 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
 
             if (!response.ok) {
                 throw new Error('서명된 URL 요청 실패');
+            }else{
+                fileNames.push(uploadKey);
             }
 
             const { url } = await response.json();
@@ -448,6 +454,8 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             if (!uploadResponse.ok) {
                 throw new Error('파일 업로드 실패');
             }
+
+            console.log(fileNames);
 
             document.getElementById('uploadStatus').textContent = '업로드 성공!';
         } catch (error) {
