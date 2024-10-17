@@ -3,7 +3,7 @@ const apiUrlBoard = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com
 
 
 
-const apiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/posts';
+const postApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/posts';
 
 const replyApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/replies';
 
@@ -94,7 +94,7 @@ document.getElementById('createPostForm').addEventListener('submit', async (e) =
 
 
 
-    const response = await fetch(`${apiUrl}/${boardType}`, {
+    const response = await fetch(`${postApiUrl}/${boardType}`, {
         method: 'POST',
         headers: {
             'Authorization': `Bearer ${idToken}`, // Cognito JWT를 Authorization 헤더에 포함
@@ -119,7 +119,7 @@ document.getElementById('loadPostsBtn').addEventListener('click', async () => {
 
 
 async function fetchPosts(boardType, lastKey = null) {
-    const url = new URL(`${apiUrl}/${boardType}`);
+    const url = new URL(`${postApiUrl}/${boardType}`);
     
     const params = {};
     if (lastKey) {
@@ -211,7 +211,7 @@ async function readPost(PK, SK){
     console.log('postId:'+postId);
     console.log('boardType:'+boardType);
 
-    const url = new URL(`${apiUrl}/${boardType}/${postId}`);
+    const url = new URL(`${postApiUrl}/${boardType}/${postId}`);
     
   
     try {
@@ -443,13 +443,15 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
 
             console.log('presignedUrl:'+url);
 
+            const resizedImage = await resizeImage(file, 800, 600); // 원하는 크기로 설정
+
             // 서명된 URL을 사용하여 S3에 파일 업로드
             const uploadResponse = await fetch(url, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': file.type,
                 },
-                body: file,
+                body: resizedImage,
             });
 
             if (!uploadResponse.ok) {
@@ -468,3 +470,51 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
     }
         
 });
+
+
+const resizeImage = (file, maxWidth, maxHeight) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            img.src = e.target.result;
+        };
+
+        img.onload = () => {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = img.width;
+            let height = img.height;
+
+            // 비율에 맞게 크기 조정
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // 리사이즈된 이미지의 Blob 가져오기
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    resolve(blob);
+                } else {
+                    reject(new Error('Could not create blob from canvas.'));
+                }
+            }, 'image/jpeg', 0.8); // JPEG 포맷과 품질 설정
+        };
+
+        reader.readAsDataURL(file);
+    });
+};
