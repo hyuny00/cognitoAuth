@@ -330,19 +330,7 @@ async function replyList(){
         replyList.innerHTML = ''; 
 
         replyList.appendChild(createReplyList(replies));
-        /*
-        replies.forEach(reply => {
-        
-            const listItem = document.createElement('li'); // 혹은 <div>
-            listItem.innerHTML = `                   
-                    <p>내용 : ${reply.Content}</p>
-                    <button onclick="setReplyToReply('${reply.SK}')">대댓글 작성</button>
-                    <ul id="nestedReplyList-${reply.SK}"></ul>
-             `;
-        
-             replyList.appendChild(listItem); // 리스트에 추가
-          });
-       */
+       
       } 
     } catch (error) {
       console.error('Network error:', error);
