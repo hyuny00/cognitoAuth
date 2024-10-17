@@ -288,6 +288,24 @@ document.getElementById('createReplyForm').addEventListener('submit', async (e) 
     }
 });
 
+function createReplyList(replies) {
+    const ul = document.createElement('ul');
+
+    replies.forEach(reply => {
+        const li = document.createElement('li');
+        li.innerHTML = `<strong>${reply.Content}</strong> <br> <small>Created: ${new Date(reply.CreationDate).toLocaleString()}</small>
+          <button onclick="setReplyToReply('${reply.SK}')">대댓글 작성</button>`;
+        
+        if (reply.children && reply.children.length > 0) {
+            const childUl = createReplyList(reply.children);
+            li.appendChild(childUl);
+        }
+
+        ul.appendChild(li);
+    });
+
+    return ul;
+}
 
 async function replyList(){
 
@@ -310,7 +328,9 @@ async function replyList(){
 
         // 기존 댓글 목록을 비운다.
         replyList.innerHTML = ''; 
-        
+
+        replyList.appendChild(createReplyList(replies));
+        /*
         replies.forEach(reply => {
         
             const listItem = document.createElement('li'); // 혹은 <div>
@@ -322,7 +342,7 @@ async function replyList(){
         
              replyList.appendChild(listItem); // 리스트에 추가
           });
-       
+       */
       } 
     } catch (error) {
       console.error('Network error:', error);
@@ -340,7 +360,7 @@ function setReplyToReply(parentReplySK) {
 async function loadNestedReplies(parentReplySK) {
     console.log('parentReplySK:'+parentReplySK);
     /*
-    const url = new URL(`${replyApiUrl}/nested/${parentReplyId}`);
+    const url = new URL(`${replyApiUrl}/${boardType}/${postId}`);
     const nestedReplyList = document.getElementById(`nestedReplyList-${parentReplyId}`);
     
     try {
@@ -385,8 +405,9 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 
     if (response.ok) {
         alert('대댓글이 성공적으로 작성되었습니다.');
-        document.getElementById('createNestedReplyForm').reset();
-        loadNestedReplies(parentReplySK); // Reload nested replies
+        replyList();
+        //document.getElementById('createNestedReplyForm').reset();
+        //loadNestedReplies(parentReplySK); // Reload nested replies
     } else {
         alert('대댓글 작성에 실패했습니다.');
     }
