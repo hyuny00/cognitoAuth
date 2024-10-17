@@ -7,7 +7,7 @@ const apiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod
 
 const replyApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/replies';
 
-const presignedUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/presignedUrl';
+const presignedUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/presignedurl';
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -402,7 +402,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
         }
 
 
-        const fileName = file.name; // 원본 파일 이름
+       
 
         const tempFileName = `${file.name}.TEMP`
 
@@ -411,6 +411,8 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
         console.log(tempFileName+":"+file.type);
 
         console.log(presignedUrl);
+
+        console.log("uploadKey:"+uploadKey);
 
         try {
             // 서버에 미리 서명된 URL 요청
@@ -436,9 +438,8 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
 
             // 서명된 URL을 사용하여 S3에 파일 업로드
             const uploadResponse = await fetch(url, {
-                method: 'POST',
+                method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${idToken}`,
                     'Content-Type': file.type,
                 },
                 body: file,
