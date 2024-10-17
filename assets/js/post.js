@@ -162,6 +162,7 @@ async function fetchPosts(boardType, lastKey = null) {
           </a>
       </strong>
       <p>내용 : ${post.Content}</p>
+      <p>댓글 : ${post.ReplyCount}</p>
    `;
   
       postList.appendChild(listItem); // 리스트에 추가
@@ -231,7 +232,7 @@ async function readPost(PK, SK){
         document.getElementById('boardType').value=boardType;
 
 
-        
+        replyList();
        
       } else {
         console.error('Error fetching posts:', post.message);
@@ -315,6 +316,8 @@ async function replyList(){
             const listItem = document.createElement('li'); // 혹은 <div>
             listItem.innerHTML = `                   
                     <p>내용 : ${reply.Content}</p>
+                    <button onclick="setReplyToReply('${reply.SK}')">대댓글 작성</button>
+                    <ul id="nestedReplyList-${reply.SK}"></ul>
              `;
         
              replyList.appendChild(listItem); // 리스트에 추가
@@ -327,6 +330,67 @@ async function replyList(){
     }
 
 }
+
+// Set parentReplyId when replying to a reply
+function setReplyToReply(parentReplySK) {
+    document.getElementById('parentReplySK').value = parentReplySK;
+}
+
+// Fetch and render nested replies
+async function loadNestedReplies(parentReplySK) {
+    console.log('parentReplySK:'+parentReplySK);
+    /*
+    const url = new URL(`${replyApiUrl}/nested/${parentReplyId}`);
+    const nestedReplyList = document.getElementById(`nestedReplyList-${parentReplyId}`);
+    
+    try {
+        const response = await fetch(url);
+        const nestedReplies = await response.json();
+        if (response.ok) {
+            nestedReplyList.innerHTML = ''; // Clear existing nested replies
+            nestedReplies.forEach(nestedReply => {
+                const nestedItem = document.createElement('li');
+                nestedItem.innerHTML = `<p>내용 : ${nestedReply.Content}</p>`;
+                nestedReplyList.appendChild(nestedItem);
+            });
+        }
+    } catch (error) {
+        console.error('Network error:', error);
+    }
+        */
+}
+
+
+document.getElementById('createNestedReplyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const postId = document.getElementById('postId').value;
+    const boardType = document.getElementById('boardType').value;
+    const parentReplySK = document.getElementById('parentReplySK').value;
+    const nestedReplyContent = document.getElementById('nestedReplyContent').value;
+
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    const response = await fetch(`${replyApiUrl}/${boardType}/${postId}`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${idToken}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({parentReplySK : parentReplySK,  content: nestedReplyContent })
+    });
+
+    if (response.ok) {
+        alert('대댓글이 성공적으로 작성되었습니다.');
+        document.getElementById('createNestedReplyForm').reset();
+        loadNestedReplies(parentReplySK); // Reload nested replies
+    } else {
+        alert('대댓글 작성에 실패했습니다.');
+    }
+});
 
 
 
