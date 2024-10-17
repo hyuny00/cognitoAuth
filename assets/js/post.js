@@ -423,6 +423,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             const response = await fetch(presignedUrl, {
                 method: 'PUT',
                 headers: {
+                    'Authorization': `Bearer ${idToken}`, // Cognito JWT를 Authorization 헤더에 포함
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
