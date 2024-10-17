@@ -7,6 +7,8 @@ const apiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod
 
 const replyApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/replies';
 
+const presignedUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/presignedUrl';
+
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -344,29 +346,6 @@ function setReplyToReply(parentReplySK) {
     document.getElementById('parentReplySK').value = parentReplySK;
 }
 
-// Fetch and render nested replies
-async function loadNestedReplies(parentReplySK) {
-    console.log('parentReplySK:'+parentReplySK);
-    /*
-    const url = new URL(`${replyApiUrl}/${boardType}/${postId}`);
-    const nestedReplyList = document.getElementById(`nestedReplyList-${parentReplyId}`);
-    
-    try {
-        const response = await fetch(url);
-        const nestedReplies = await response.json();
-        if (response.ok) {
-            nestedReplyList.innerHTML = ''; // Clear existing nested replies
-            nestedReplies.forEach(nestedReply => {
-                const nestedItem = document.createElement('li');
-                nestedItem.innerHTML = `<p>내용 : ${nestedReply.Content}</p>`;
-                nestedReplyList.appendChild(nestedItem);
-            });
-        }
-    } catch (error) {
-        console.error('Network error:', error);
-    }
-        */
-}
 
 
 document.getElementById('createNestedReplyForm').addEventListener('submit', async (e) => {
@@ -393,9 +372,9 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 
     if (response.ok) {
         alert('대댓글이 성공적으로 작성되었습니다.');
+        document.getElementById('createNestedReplyForm').reset();
         replyList();
-        //document.getElementById('createNestedReplyForm').reset();
-        //loadNestedReplies(parentReplySK); // Reload nested replies
+
     } else {
         alert('대댓글 작성에 실패했습니다.');
     }
@@ -403,3 +382,79 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 
 
 
+document.getElementById('fileInput').addEventListener('change', async (event) => {
+
+    const idToken = localStorage.getItem('idToken');
+    if (!idToken) {
+        alert('로그인이 필요합니다.');
+        return;
+    }
+
+    const file = event.target.files[0]; // 선택한 파일
+
+    if (file) {
+
+        // 파일 타입 확인
+        const isImage = file.type.startsWith('image/');
+        if (!isImage) {
+            document.getElementById('uploadStatus').textContent = '이미지 파일만 업로드할 수 있습니다.';
+            return;
+        }
+
+
+        const fileName = file.name; // 원본 파일 이름
+
+        const tempFileName = `${file.name}.TEMP`
+
+        const uploadKey = `uploads/${tempFileName}`; // 업로드할 경로 및 파일 이름 (여기서 원하는 키를 설정)
+
+        console.log(tempFileName+":"+file.type);
+
+        console.log(presignedUrl);
+
+        try {
+            // 서버에 미리 서명된 URL 요청
+            const response = await fetch(presignedUrl, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    fileName: uploadKey, // 설정한 키를 사용
+                    fileType: file.type,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('서명된 URL 요청 실패');
+            }
+
+            const { url } = await response.json();
+
+
+            console.log('presignedUrl:'+url);
+
+            // 서명된 URL을 사용하여 S3에 파일 업로드
+            const uploadResponse = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${idToken}`,
+                    'Content-Type': file.type,
+                },
+                body: file,
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('파일 업로드 실패');
+            }
+
+            document.getElementById('uploadStatus').textContent = '업로드 성공!';
+        } catch (error) {
+            console.error('오류 발생:', error);
+            document.getElementById('uploadStatus').textContent = '업로드 실패: ' + error.message;
+        }
+    } else {
+        alert('파일을 선택하세요.');
+    }
+        
+});
