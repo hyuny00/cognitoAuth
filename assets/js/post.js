@@ -381,8 +381,10 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 });
 
 
-const fileNames = [];
+const fileList = [];
 document.getElementById('fileInput').addEventListener('change', async (event) => {
+
+ 
 
     const idToken = localStorage.getItem('idToken');
     if (!idToken) {
@@ -435,7 +437,9 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             if (!response.ok) {
                 throw new Error('서명된 URL 요청 실패');
             }else{
-                fileNames.push(uploadKey);
+                //fileList.push(uploadKey);
+
+                fileList.push( {uploadKey: uploadKey, filename: file.name} );
             }
 
             const { url } = await response.json();
@@ -458,7 +462,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
                 throw new Error('파일 업로드 실패');
             }
 
-            console.log(fileNames);
+            console.log(fileList);
 
             document.getElementById('uploadStatus').textContent = '업로드 성공!';
         } catch (error) {
