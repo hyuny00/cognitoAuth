@@ -462,9 +462,11 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
                 throw new Error('파일 업로드 실패');
             }
 
-            console.log(fileList);
+            
 
             document.getElementById('uploadStatus').textContent = '업로드 성공!';
+            renderFileList();
+         
         } catch (error) {
             console.error('오류 발생:', error);
             document.getElementById('uploadStatus').textContent = '업로드 실패: ' + error.message;
@@ -522,3 +524,34 @@ const resizeImage = (file, maxWidth, maxHeight) => {
         reader.readAsDataURL(file);
     });
 };
+
+
+function renderFileList() {
+    const fileListElement = document.getElementById('fileList');
+    fileListElement.innerHTML = '';  // 목록을 비움
+
+    fileList.forEach((file, index) => {
+        const listItem = document.createElement('li');
+        listItem.textContent = file.filename;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => {
+            deleteFile(index);
+        });
+
+        listItem.appendChild(deleteButton);
+        fileListElement.appendChild(listItem);
+    });
+
+    console.log(fileList);
+}
+
+// 파일을 삭제하는 함수
+function deleteFile(index) {
+    fileList.splice(index, 1);  // 파일 목록에서 해당 파일을 삭제
+    renderFileList();  // 목록을 다시 렌더링
+}
+
+// 초기 렌더링
+renderFileList();
