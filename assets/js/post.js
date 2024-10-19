@@ -78,6 +78,7 @@ function listBoards(){
 
 
 
+const fileList = [];
 // 게시글 작성
 document.getElementById('createPostForm').addEventListener('submit', async (e) => {
 
@@ -100,7 +101,7 @@ document.getElementById('createPostForm').addEventListener('submit', async (e) =
             'Authorization': `Bearer ${idToken}`, // Cognito JWT를 Authorization 헤더에 포함
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ title: postTitle, content: postContent })
+        body: JSON.stringify({ title: postTitle, content: postContent ,fileList:fileList})
     });
 
     if (response.ok) {
@@ -381,7 +382,6 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 });
 
 
-const fileList = [];
 document.getElementById('fileInput').addEventListener('change', async (event) => {
 
  
@@ -555,3 +555,5 @@ function deleteFile(index) {
 
 // 초기 렌더링
 renderFileList();
+
+
