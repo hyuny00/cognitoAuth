@@ -240,7 +240,7 @@ async function readPost(PK, SK){
 
         fileList = [...post.fileList];
 
-        renderEditFileList();
+        renderFileList();
 
         
 
@@ -537,30 +537,10 @@ const resizeImage = (file, maxWidth, maxHeight) => {
 };
 
 
+
+
 function renderFileList() {
     const fileListElement = document.getElementById('fileList');
-    fileListElement.innerHTML = '';  // 목록을 비움
-
-    fileList.forEach((file, index) => {
-        const listItem = document.createElement('li');
-        listItem.textContent = file.filename;
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        deleteButton.addEventListener('click', () => {
-            deleteFile(index);
-        });
-
-        listItem.appendChild(deleteButton);
-        fileListElement.appendChild(listItem);
-    });
-
-    console.log(fileList);
-}
-
-
-function renderEditFileList() {
-    const fileListElement = document.getElementById('fileEditList');
     fileListElement.innerHTML = '';  // 목록을 비움
 
     fileList.forEach((file, index) => {
