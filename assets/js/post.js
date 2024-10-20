@@ -78,7 +78,7 @@ function listBoards(){
 
 
 
-const fileList = [];
+let  fileList = [];
 // 게시글 작성
 document.getElementById('createPostForm').addEventListener('submit', async (e) => {
 
@@ -225,6 +225,8 @@ async function readPost(PK, SK){
 
         const postDetail = document.getElementById('postDetail');
 
+        console.log(post);
+
         // 게시물의 세부 정보를 설정합니다.
         postDetail.innerHTML = `
             <strong>제목: ${post.Title}</strong><br>
@@ -233,6 +235,14 @@ async function readPost(PK, SK){
         `;
         document.getElementById('postId').value=postId;
         document.getElementById('boardType').value=boardType;
+
+
+
+        fileList = [...post.fileList];
+
+        renderEditFileList();
+
+        
 
 
         replyList();
@@ -411,14 +421,15 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
         const tempFileName = `${file.name}.TEMP`
 
         // 타임스탬프를 파일 이름에 추가
-        const uploadKey = `uploads/${year}/${month}/${timestamp}-${tempFileName}`;
+        //const uploadKey = `uploads/${year}/${month}/${timestamp}-${tempFileName}`;
+        const uploadKey = `uploads/${year}/${month}/${timestamp}-${file.name}`;
        
 
         console.log(tempFileName+":"+file.type);
 
         console.log(presignedUrl);
 
-        console.log("uploadKey:"+uploadKey);
+        console.log("uploadFileS:"+`${uploadKey}.TEMP`);
 
         try {
             // 서버에 미리 서명된 URL 요청
@@ -429,7 +440,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    fileName: uploadKey, // 설정한 키를 사용
+                    fileName: `${uploadKey}.TEMP`, // 설정한 키를 사용
                     fileType: file.type,
                 }),
             });
@@ -439,7 +450,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
             }else{
                 //fileList.push(uploadKey);
 
-                fileList.push( {uploadKey: uploadKey, filename: file.name} );
+                fileList.push( {uploadKey: uploadKey, filename: file.name, status : 'add'} );
             }
 
             const { url } = await response.json();
@@ -547,10 +558,50 @@ function renderFileList() {
     console.log(fileList);
 }
 
+
+function renderEditFileList() {
+    const fileListElement = document.getElementById('fileEditList');
+    fileListElement.innerHTML = '';  // 목록을 비움
+
+    fileList.forEach((file, index) => {
+        if(file.status!='delete'){
+            const listItem = document.createElement('li');
+            listItem.textContent = file.filename;
+    
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', () => {
+                deleteFile(index);
+            });
+    
+            listItem.appendChild(deleteButton);
+            fileListElement.appendChild(listItem);
+        }
+       
+    });
+
+    console.log(fileList);
+}
+
 // 파일을 삭제하는 함수
 function deleteFile(index) {
-    fileList.splice(index, 1);  // 파일 목록에서 해당 파일을 삭제
+
+
+    const deletedFile = fileList[index];
+    console.log(deletedFile.status)
+
+    if (typeof deletedFile.status === 'undefined') {
+        // Mark as deleted if it was an existing file
+        deletedFile.status = 'delete'; 
+    } else {
+        // If it's a newly added file, remove it directly
+        fileList.splice(index, 1);  
+    }
+
+
+   // fileList.splice(index, 1);  // 파일 목록에서 해당 파일을 삭제
     renderFileList();  // 목록을 다시 렌더링
+    renderEditFileList();
 }
 
 // 초기 렌더링
