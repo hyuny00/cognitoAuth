@@ -4,7 +4,7 @@ const apiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod
 // 게시판 생성
 document.getElementById('createBoardForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const boardType = document.getElementById('boardType').value;
+   
     const boardName = document.getElementById('boardName').value;
     const description = document.getElementById('boardDescription').value;
 
@@ -20,7 +20,7 @@ document.getElementById('createBoardForm').addEventListener('submit', async (e) 
                 'Authorization': `Bearer ${idToken}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ boardType, boardName, description }),
+            body: JSON.stringify({ boardName, description }),
         });
 
         if (response.ok) {
@@ -155,3 +155,4 @@ document.getElementById('viewBoardsBtn').addEventListener('click', async () => {
         
     }        
 });
+

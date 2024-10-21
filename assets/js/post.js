@@ -10,6 +10,8 @@ const replyApiUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com
 const presignedUrl = 'https://0h8fnl8ir8.execute-api.ap-northeast-2.amazonaws.com/prod/presignedurl';
 
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
 
     listBoards();
@@ -236,14 +238,12 @@ async function readPost(PK, SK){
         document.getElementById('postId').value=postId;
         document.getElementById('boardType').value=boardType;
 
-
-
         fileList = [...post.fileList];
 
+        console.log("jjjjjj............."+fileList.length);
+
         renderFileList();
-
-        
-
+        renderImgFileList();
 
         replyList();
        
@@ -588,3 +588,48 @@ function deleteFile(index) {
 renderFileList();
 
 
+async function getPresignedUrl(uploadKey) {
+    try {
+         // uploadKey를 인코딩하여 안전하게 URL로 사용
+        const encodedUploadKey = encodeURIComponent(uploadKey);
+        const response = await fetch(`${presignedUrl}/${encodedUploadKey}`);  // This calls your backend to get the presigned URL
+        const data = await response.json();
+
+        if (response.ok) {
+            return data.url;  // Return the presigned URL
+        } else {
+            console.error('Error fetching presigned URL:', data.message);
+            return null;  // Return null if error
+        }
+    } catch (error) {
+        console.error('Network error while fetching presigned URL:', error);
+        return null;
+    }
+}
+
+
+// Step 2: Render the file list including images
+async function renderImgFileList() {
+    const fileContainer = document.getElementById('fileContainer');  // Assuming there's a container for files
+    fileContainer.innerHTML = '';  // Clear any previous content
+
+    // Loop through the fileList and fetch presigned URLs
+    console.log(fileList.length);
+    for (const file of fileList) {
+        console.log('AAAAAAAAAAAAAAAA');
+        const presignedUrl = await getPresignedUrl(file.uploadKey);
+
+        if (presignedUrl) {
+            const imgElement = document.createElement('img');
+            imgElement.src = presignedUrl;
+            imgElement.alt = file.filename;
+            imgElement.style.width = '100px';  // Example size, you can adjust as needed
+
+            const fileItem = document.createElement('div');
+            fileItem.innerHTML = `<p>${file.filename}</p>`;
+            fileItem.appendChild(imgElement);  // Append the image to the file item
+
+            fileContainer.appendChild(fileItem);  // Append the file item to the container
+        }
+    }
+}
