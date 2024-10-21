@@ -133,17 +133,16 @@ async function fetchPosts(boardType, lastKey = null) {
   
     try {
 
-        console.log('mmm....:'+url);
       const response = await fetch(url);
       const data = await response.json();
-
+      console.log(data);
    
       
       if (response.ok) {
         return data;
       } else {
-        console.error('Error fetching posts:', data.message);
-        return null;
+        console.log(data.message);
+        return true;
       }
     } catch (error) {
       console.error('Network error:', error);
@@ -240,7 +239,6 @@ async function readPost(PK, SK){
 
         fileList = [...post.fileList];
 
-        console.log("jjjjjj............."+fileList.length);
 
         renderFileList();
         //renderImgFileList();
@@ -502,6 +500,7 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
 
 const resizeImage = (file, maxWidth, maxHeight) => {
     return new Promise((resolve, reject) => {
+        console.log("start");
         const img = new Image();
         const reader = new FileReader();
 
@@ -542,7 +541,7 @@ const resizeImage = (file, maxWidth, maxHeight) => {
                 }
             }, 'image/jpeg', 0.8); // JPEG 포맷과 품질 설정
         };
-
+        console.log("end");
         reader.readAsDataURL(file);
     });
 };
