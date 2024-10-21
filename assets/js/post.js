@@ -395,6 +395,14 @@ document.getElementById('createNestedReplyForm').addEventListener('submit', asyn
 });
 
 
+// 파일 입력과 커스텀 버튼 가져오기
+const fileInput = document.getElementById('fileInput');
+const uploadButton = document.getElementById('uploadButton');
+
+uploadButton.addEventListener('click', () => {
+    fileInput.click();
+});
+
 document.getElementById('fileInput').addEventListener('change', async (event) => {
 
  
@@ -618,6 +626,11 @@ async function renderImgFileList() {
 
     const fileContainer = document.getElementById('fileContainer');  // Assuming there's a container for files
     fileContainer.innerHTML = '';  // Clear any previous content
+
+
+    const gallery = document.getElementById('image-gallery');
+    gallery.innerHTML = '';  // Clear any previous content
+
 
     // Loop through the fileList and fetch presigned URLs
     console.log(fileList.length);

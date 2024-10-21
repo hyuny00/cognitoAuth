@@ -56,7 +56,14 @@
                 <label for="postContent" class="form-label">내용</label>
                 <textarea class="form-control" id="postContent" rows="3" required></textarea>
             </div>
-            <input type="file" id="fileInput" accept="image/*" />
+          
+
+            <!-- 숨겨진 파일 입력 -->
+            <input type="file" id="fileInput" accept="image/*" style="display: none;" />
+            
+            <!-- 커스텀 버튼 -->
+            <button type="button" class="btn btn-primary" id="uploadButton">업로드</button>
+
             <div id="uploadStatus"></div>
             <canvas id="canvas" style="display: none;"></canvas>
             <ul id="fileList"></ul>
