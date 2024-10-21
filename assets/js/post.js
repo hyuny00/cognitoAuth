@@ -403,7 +403,7 @@ uploadButton.addEventListener('click', () => {
 
 document.getElementById('fileInput').addEventListener('change', async (event) => {
 
- 
+    const maxFileSize = 5 * 1024 * 1024; // 5MB 제한
 
     const idToken = localStorage.getItem('idToken');
     if (!idToken) {
@@ -414,6 +414,12 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
     const file = event.target.files[0]; // 선택한 파일
 
     if (file) {
+
+      
+        if (file.size > maxFileSize) {
+            alert(`${file.name}은(는) 5MB를 초과하여 업로드할 수 없습니다.`);
+            return;
+        }
 
         // 파일 타입 확인
         const isImage = file.type.startsWith('image/');
@@ -427,18 +433,10 @@ document.getElementById('fileInput').addEventListener('change', async (event) =>
         const month = String(date.getMonth() + 1).padStart(2, '0');
         const timestamp = date.getTime();  // 타임스탬프 (밀리초 단위)
 
-        const tempFileName = `${file.name}.TEMP`
 
         // 타임스탬프를 파일 이름에 추가
-        //const uploadKey = `uploads/${year}/${month}/${timestamp}-${tempFileName}`;
         const uploadKey = `uploads/${year}/${month}/${timestamp}-${file.name}`;
        
-
-        console.log(tempFileName+":"+file.type);
-
-        console.log(presignedUrl);
-
-        console.log("uploadFileS:"+`${uploadKey}.TEMP`);
 
         try {
             // 서버에 미리 서명된 URL 요청
