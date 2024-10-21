@@ -243,7 +243,10 @@ async function readPost(PK, SK){
         console.log("jjjjjj............."+fileList.length);
 
         renderFileList();
-        renderImgFileList();
+        //renderImgFileList();
+
+        const images = await renderImgFileList();
+        displayImages(images);
 
         replyList();
        
@@ -581,7 +584,7 @@ function deleteFile(index) {
 
    // fileList.splice(index, 1);  // 파일 목록에서 해당 파일을 삭제
     renderFileList();  // 목록을 다시 렌더링
-    renderEditFileList();
+    //renderEditFileList();
 }
 
 // 초기 렌더링
@@ -610,26 +613,83 @@ async function getPresignedUrl(uploadKey) {
 
 // Step 2: Render the file list including images
 async function renderImgFileList() {
+
+    let fetchImages=[];
+
     const fileContainer = document.getElementById('fileContainer');  // Assuming there's a container for files
     fileContainer.innerHTML = '';  // Clear any previous content
 
     // Loop through the fileList and fetch presigned URLs
     console.log(fileList.length);
     for (const file of fileList) {
-        console.log('AAAAAAAAAAAAAAAA');
+
         const presignedUrl = await getPresignedUrl(file.uploadKey);
 
+        fetchImages.push(presignedUrl);
+/*
         if (presignedUrl) {
             const imgElement = document.createElement('img');
             imgElement.src = presignedUrl;
             imgElement.alt = file.filename;
-            imgElement.style.width = '100px';  // Example size, you can adjust as needed
+            imgElement.style.width = '500px';  // Example size, you can adjust as needed
 
             const fileItem = document.createElement('div');
             fileItem.innerHTML = `<p>${file.filename}</p>`;
             fileItem.appendChild(imgElement);  // Append the image to the file item
 
             fileContainer.appendChild(fileItem);  // Append the file item to the container
+        }
+            */
+    }
+
+    console.log(fetchImages);
+
+    return fetchImages;
+}
+
+
+function displayImages(images) {
+    const gallery = document.getElementById('image-gallery');
+    const imageCount = images.length;
+
+    if (imageCount === 0) return;
+
+    if (imageCount === 1) {
+        const img = `<div class="col-12 image-container"><img src="${images[0]}" alt="Image 1"></div>`;
+        gallery.innerHTML += img;
+    } else if (imageCount === 2) {
+        const img = `
+            <div class="col-6 image-container">
+                <img src="${images[0]}" alt="Image 1">
+            </div>
+            <div class="col-6 image-container">
+                <img src="${images[1]}" alt="Image 2">
+            </div>`;
+        gallery.innerHTML += img;
+    } else if (imageCount === 3) {
+        const img = `
+            <div class="col-6 image-container">
+                <img src="${images[0]}" alt="Image 1">
+            </div>
+            <div class="col-6 image-container">
+                <img src="${images[1]}" alt="Image 2">
+            </div>
+            <div class="col-6 image-container d-flex align-items-start" style="min-height: 200px;">
+                <img src="${images[2]}" alt="Image 3" class="img-fluid" style="flex-shrink: 0; height: 100%;">
+            </div>`;
+        gallery.innerHTML += img;
+    } else if (imageCount >= 4) {
+        for (let i = 0; i < imageCount; i += 2) {
+            const imgRow = `
+                <div class="row">
+                    <div class="col-6 image-container">
+                        <img src="${images[i]}" alt="Image ${i + 1}">
+                    </div>
+                    <div class="col-6 image-container">
+                        <img src="${images[i + 1]}" alt="Image ${i + 2}">
+                    </div>
+                </div>`;
+            gallery.innerHTML += imgRow;
         }
     }
 }

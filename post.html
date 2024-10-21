@@ -23,6 +23,14 @@
             border: 1px solid #ccc;
             border-radius: 8px;
         }
+
+        .image-container {
+            margin-bottom: 20px; /* Space between rows */
+        }
+        .image-container img {
+            width: 100%; /* Responsive images */
+            height: auto; /* Maintain aspect ratio */
+        }
     </style>
 </head>
 <body>
@@ -73,6 +81,13 @@
           <div id="fileEditList"></div>
           <div id="fileContainer"></div>
           
+          <div class="container">
+            <div id="image-gallery" class="row">
+                <!-- Images will be dynamically inserted here -->
+            </div>
+        </div>
+
+        
           <input type="hidden" name="postId" id="postId" value="">
           <input type="hidden" name="boardType" id="boardType" value="">
         
