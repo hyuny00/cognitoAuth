@@ -69,7 +69,8 @@ document.getElementById('editBoardForm').addEventListener('submit', async (e) =>
             alert('게시판이 성공적으로 수정되었습니다.');
             document.getElementById('editBoardForm').reset();
         } else {
-            throw new Error(`Error: ${response.status} - ${errorMessage}`);
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
         }
     } catch (error) {
         
@@ -98,12 +99,13 @@ document.getElementById('deleteBoardForm').addEventListener('submit', async (e) 
                 'Content-Type': 'application/json'
             }
         });
-
+      
         if (response.ok) {
             alert('게시판이 성공적으로 삭제되었습니다.');
             document.getElementById('deleteBoardForm').reset();
         } else {
-            throw new Error(`Error: ${response.status} - ${errorMessage}`);
+            const errorData = await response.json();
+            throw new Error(`Error: ${response.status} - ${errorData.message}`);
         }
     } catch (error) {
         
